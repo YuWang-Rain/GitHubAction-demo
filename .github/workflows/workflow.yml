@@ -1,0 +1,27 @@
+name: Demo Continous Integration
+
+on:
+  push:
+    branches: [main]
+jobs:
+  test_pull_request:
+    name: demo for githubaction
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: echo workflow run successful!
+      - name: login to Aliyun Container Registry (ACR)
+        uses: aliyun/acr-login@v1
+        with: 
+          login-server: "${{secrets.ALI_SERVER}}"
+          username: "${{ secrets.ALI_USERNAME }}"
+          password: "${{ secrets.ALI_PASSWORD }}"
+      - name: build and push docker image to ACR
+        env:
+          IMAGE_TAG: "${{ github.sha }}"
+        run: |
+          docker build -t registry.cn-hangzhou.aliyuncs.com/demo_docker_yuwang/demo:$IMAGE_TAG .
+          docker push registry.cn-hangzhou.aliyuncs.com/demo_docker_yuwang/demo:$IMAGE_TAG
