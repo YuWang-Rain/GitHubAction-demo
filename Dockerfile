@@ -6,6 +6,8 @@ ENV PORT 3000
 
 COPY . .
 
+RUN npm cache clean --force
+
 RUN npm install
 
 CMD ["node", "server.js"] 
