@@ -6,7 +6,7 @@ ENV PORT 3000
 
 COPY . .
 
-RUN npm cache clean --force
+RUN npm config set registry http://registry.npmjs.org/
 
 RUN npm install
 
